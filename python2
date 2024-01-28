@@ -1,0 +1,25 @@
+from flask import Flask, render_template_string
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    title = "Главная страница"
+    source = """<html><body>
+        <h1>{{h1}}</h1>
+        <h3><a href="{{url_for('hello')}}">Страница с приветом...</a></h3>
+        </body></html>"""
+    return render_template_string(source, h1=title)
+
+@app.route('/hello/')
+@app.route('/hello/<name>/')
+def hello(name=None):
+    if name is None:
+        name = 'Flask'
+    source = """<html><body>
+        <h1>Привет {{name}}!</h1>
+        <h3><a href="{{url_for('index')}}">Главная страница...</a></h3>
+        </body></html>"""
+    return render_template_string(source, name=name)
+
+if __name__ == '__main__':
+    app.run(host='localhost', port=5000, debug=True)
